@@ -653,7 +653,7 @@ describe('express-csp', function () {
             } 
             expect(error).to.not.be.an('undefined');
             expect(error.message).to.not.be.an('undefined');
-            expect(error.message).to.equal("You cannot explicitly set a nonce at the app level. If you want to use a nonce, set `useScriptNonce` or `useStyleNonce` to true in the config object.");
+            expect(error.message).to.equal("Youxx cannot explicitly set a nonce at the app level. If you want to use a nonce, set `useScriptNonce` or `useStyleNonce` to true in the config object.");
         });
 
     });
