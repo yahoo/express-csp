@@ -1,0 +1,15 @@
+{
+    "node"     : true,
+    "curly"    : true,
+    "eqeqeq"   : true,
+    "forin"    : true,
+    "immed"    : true,
+    "newcap"   : true,
+    "noarg"    : true,
+    "noempty"  : true,
+    "undef"    : true,
+    "unused"   : "vars",
+
+    "expr"     : true,
+    "validthis": true
+}

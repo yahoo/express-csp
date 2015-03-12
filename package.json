@@ -1,0 +1,39 @@
+{
+  "name": "express-csp",
+  "version": "0.0.0",
+  "description": "Express middleware that simplifies using Content Security Policy",
+    "licenses": [
+    {
+      "type" : "BSD",
+      "url" : "https://github.com/yahoo/express-csp/blob/master/LICENSE"
+    }
+  ],
+  "main": "index.js",
+  "scripts": {
+    "pretest": "jshint .",
+    "test": "istanbul cover -- _mocha tests/"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:yahoo/express-csp.git"
+  },
+  "keywords": [
+    "express",
+    "middleware",
+    "csp"
+  ],
+  "author": "Juan Dopazo <juan@dopazo.me>",
+  "devDependencies": {
+    "chai": "~1.10.0",
+    "express": "~4.10.2",
+    "express-handlebars": "~1.1.0",
+    "istanbul": "~0.3.6",
+    "jshint": "^2.6.0",
+    "mocha": "^2.1.0",
+    "object-assign": "~1.0.0",
+    "supertest": "~0.15.0"
+  },
+  "dependencies": {
+    "lru-cache": "~2.5.0"
+  }
+}
