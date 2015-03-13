@@ -16,6 +16,7 @@ API
 var csp = require('express-csp');
 
 var app = express();
+
 csp.extend(app, {
     policy: {
         directives: {

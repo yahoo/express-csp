@@ -91,8 +91,8 @@ function testToEnsurePoliciesAreUnchanged(res) {
         policies.forEach(function(policy) {
             directives[policy.shift()] = policy;
         });
-        Object.keys(allDirectives).forEach(function(key, index) {
-            if(testDirectiveKeys.indexOf(key) > -1) {
+        Object.keys(allDirectives).forEach(function(key/*, index */) {
+            if (testDirectiveKeys.indexOf(key) > -1) {
                 var testDirective = testPolicy.directives[key];
                 expect(directiveKeys.indexOf(key)).to.be.above(-1);
                 testDirective.forEach(function(rule, dirIndex) {
@@ -337,7 +337,7 @@ describe('express-csp', function () {
         });
     });
     
-    describe('csp polices cannot be altered after they are set', function(done) {
+    describe('csp polices cannot be altered after they are set', function(/* done */) {
         var cspPolicies = getCleanPolicies(),
             app = createApp(cspPolicies);
 
@@ -589,7 +589,7 @@ describe('express-csp', function () {
         });
     });
 
-    describe('manually set nonces and shas', function(done) {
+    describe('manually set nonces and shas', function(/* done */) {
         var policies = getCleanPolicies(),
             sha = 'sha256-' + hash('console.log("I am safe");'),
             app;

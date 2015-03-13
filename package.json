@@ -4,8 +4,8 @@
   "description": "Express middleware that simplifies using Content Security Policy",
     "licenses": [
     {
-      "type" : "BSD",
-      "url" : "https://github.com/yahoo/express-csp/blob/master/LICENSE"
+      "type": "BSD",
+      "url": "https://github.com/yahoo/express-csp/blob/master/LICENSE"
     }
   ],
   "main": "index.js",
