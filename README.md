@@ -16,6 +16,7 @@ API
 var csp = require('express-csp');
 
 var app = express();
+
 csp.extend(app, {
     policy: {
         directives: {
@@ -50,7 +51,7 @@ When set to true, a [`nonce`](http://w3c.github.io/webappsec/specs/content-secur
 
 When set to true, a [`nonce`](http://w3c.github.io/webappsec/specs/content-security-policy/#script-src-the-nonce-attribute) will be generated for the `'style-src'` directive of each response and made available as the `res.locals.cspToken` value. This value can then be used in your templates to allow for specified inline script and style blocks. If [`useScriptNonce`](#useScriptNonce) is also true, the same token will be added to the `'script-src'` directive and the same token will be available for inline script blocks.
 
-```js
+```html
 <script nonce="{{res.locals.cspToken}}">
 foo();
 </script>
@@ -90,7 +91,7 @@ app.signScript('foo();');
 ```
 
 Enables `foo();` throughout the app
-```js
+```html
 <script>foo();</script>
 ```
 At the response level
@@ -100,12 +101,12 @@ app.route('/').get(function (req, res) {
 });
 ```
 Enables `bar();` for the route only.
-```js
+```html
 <script>bar();</script>
 ```
 
 These will not work with the above examples.
-```js
+```html
 <script>
 foo();
 </script>
@@ -132,7 +133,7 @@ app.route('/').get(function (req, res) {
 ### res.setPolicy
 Allows policy to be set per request. The app level policy set in `extend` will be ignored when `res.setPolicy` is used. This method takes the same config object as the `extend` method.
 
-```
+```js
 app.get('/', function(req, res, next) {
     res.setPolicy({
         policy: {
