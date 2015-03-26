@@ -155,5 +155,5 @@ app.get('/', function(req, res, next) {
 Code licensed under the BSD license. See [LICENSE file][] file for terms.
 
 [LICENSE file]: https://github.com/yahoo/express-csp/blob/master/LICENSE
-[travis]: https://magnum.travis-ci.com/yahoo/express-csp
-[travis-badge]: https://magnum.travis-ci.com/yahoo/express-csp.svg?token=sERbWYBoHCubXykGzY6R
+[travis]: https://travis-ci.org/yahoo/express-csp
+[travis-badge]: http://img.shields.io/travis/yahoo/express-csp.svg?style=flat-square
