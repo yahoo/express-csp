@@ -4,6 +4,13 @@ node_js:
     - 0.10
     - 0.12
 
+notifications:
+    email:
+        recipients:
+            - ypt-team@yahoo-inc.com
+    on_success: change
+    on_failure: always
+
 ##
 # Ensures that the git tag matches the version in package.json
 #
