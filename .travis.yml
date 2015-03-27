@@ -3,12 +3,14 @@ node_js:
     - 0.10
     - 0.12
 after_success:
-    - echo "branch" $TRAVIS_BRANCH
+    - echo "branch" $TRAVIS_BRANCH \
+        && echo "tag" $TRAVIS_TAG
 deploy:
     provider: npm
     email: ypt-team@yahoo-inc.com
     api_key: 
         secure: s5KbfZ2QmDElovpw8PZYFwiwYIcvmORO1dpnsbSpuNrdgW/vr79vxmETg1RdaTOC+eprtJgf3DkqBeuUeavc2S9ksO9sbryhL48Sfu3wQBQWIfana6H1weVpHxUfS4TU9bT2zRlxRDQsYuFmmtacaJ0DpDKrnpdpVBgXxKJWq4o=
     on:
+        condition: $VALID_VERSION = true
         tags: true
         all_branches: true
