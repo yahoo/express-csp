@@ -9,7 +9,7 @@ notifications:
         on_success: change
         on_failure: always
 after_success:
-    - test $TRAVIS_TEST_RESULT = 0 && echo "tests pass"
+    - test echo $TRAVIS_BRANCH
 deploy:
     provider: npm
     email: ypt-team@yahoo-inc.com
