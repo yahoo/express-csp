@@ -1,11 +1,11 @@
 {
   "name": "express-csp",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "description": "Express middleware that simplifies using Content Security Policy",
-    "licenses": [
+  "licenses": [
     {
-      "type" : "BSD",
-      "url" : "https://github.com/yahoo/express-csp/blob/master/LICENSE"
+      "type": "BSD",
+      "url": "https://github.com/yahoo/express-csp/blob/master/LICENSE"
     }
   ],
   "main": "index.js",
@@ -30,10 +30,11 @@
     "istanbul": "~0.3.6",
     "jshint": "^2.6.0",
     "mocha": "^2.1.0",
-    "object-assign": "~1.0.0",
     "supertest": "~0.15.0"
   },
   "dependencies": {
-    "lru-cache": "~2.5.0"
+    "lru-cache": "~2.5.0",
+    "object-assign": "~1.0.0",
+    "on-headers": "^1.0.0"
   }
 }

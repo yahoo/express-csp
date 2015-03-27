@@ -1,4 +1,24 @@
 language: node_js
+
 node_js:
-    - "0.10"
-    - "0.12"
+    - 0.10
+    - 0.12
+
+##
+# Ensures that the git tag matches the version in package.json
+#
+# Example:
+# If package.version is `0.0.1` then the git tag must be `0.0.1`
+##
+after_success:
+    - test $(cat $TRAVIS_BUILD_DIR/package.json | grep version | awk '{print $2}' | sed 's/"//g' | sed 's/,//g') = $TRAVIS_TAG && export VALID_VERSION=true
+
+deploy:
+    provider: npm
+    email: ypt-team@yahoo-inc.com
+    api_key: 
+        secure: s5KbfZ2QmDElovpw8PZYFwiwYIcvmORO1dpnsbSpuNrdgW/vr79vxmETg1RdaTOC+eprtJgf3DkqBeuUeavc2S9ksO9sbryhL48Sfu3wQBQWIfana6H1weVpHxUfS4TU9bT2zRlxRDQsYuFmmtacaJ0DpDKrnpdpVBgXxKJWq4o=
+    on:
+        condition: $VALID_VERSION = true
+        tags: true
+        all_branches: true

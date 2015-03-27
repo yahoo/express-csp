@@ -23,20 +23,20 @@ var appDefaults = {
 };
 
 var allDirectives = {
-    'default-src' : ['self' ],
-    'style-src' : ['self', 'styles.*.foo.com', '*.styles.bar.com'],
-    'connect-src' : ['self', 'feeds.*.foo.com'],
-    'script-src' : ['self', '*.scripts.foo.com', '*.build.baz.com'],
-    'object-src' : ['self', '*.docs.bar.com'],
-    'img-src' : ['self', '*.assets.foo.com', '*.images.foo.com'],
+    'base-uri'        : ['self'],
+    'child-src'       : ['self', '*.ads.foo.com'],
+    'connect-src'     : ['self', 'feeds.*.foo.com'],
+    'default-src'     : ['self' ],
+    'font-src'        : ['fonts.foo.com'],
+    'form-action'     : ['self', '*.apis.baz.com'],
     'frame-ancestors' : ['self'],
-    'form-action' : ['self', '*.apis.baz.com'],
-    'child-src' : ['self', '*.ads.foo.com'],
-    'base-uri' : ['self'],
-    'media-src' : ['self', '*.content.foo.com', '*.videos.bar.com'],
-    'font-src' : ['fonts.foo.com'],
-    'plugin-types' : ['application/pdf'],
-    'report-uri' : ['http://www.foo.com/report']
+    'img-src'         : ['self', '*.assets.foo.com', '*.images.foo.com'],
+    'media-src'       : ['self', '*.content.foo.com', '*.videos.bar.com'],
+    'object-src'      : ['self', '*.docs.bar.com'],
+    'plugin-types'    : ['application/pdf'],
+    'report-uri'      : ['http://www.foo.com/report'],
+    'script-src'      : ['self', '*.scripts.foo.com', '*.build.baz.com'],
+    'style-src'       : ['self', 'styles.*.foo.com', '*.styles.bar.com']
 };
 
 function createApp(options) {
@@ -44,9 +44,7 @@ function createApp(options) {
     csp.extend(app, Object.assign({}, appDefaults, options || {}));
 
     app.route('/').get(function (req, res) {
-        res.writeHead(200, {
-            'Content-Type': 'text/html'
-        });
+        res.writeHead(200, { 'Content-Type': 'text/html' });
         res.end('<!DOCTYPE html><html><head><title>CSP test</title></head><body></body></html>');
     });
 
@@ -58,13 +56,13 @@ function getCleanPolicies() {
         policy: {
             directives: {
                 'script-src' : ['self', 'unsafe-inline'],
-                'style-src' : ['*.foo.com']
+                'style-src'  : ['*.foo.com']
             }
         },
         reportPolicy: {
             directives: {
                 'script-src' : ['self', 'unsafe-inline'],
-                'style-src' : ['*.foo.com']
+                'style-src'  : ['*.foo.com']
             }
         }
     };
@@ -87,12 +85,13 @@ function testToEnsurePoliciesAreUnchanged(res) {
             return policy[0];
         });
         var directives = {};
-        
+
         policies.forEach(function(policy) {
             directives[policy.shift()] = policy;
         });
-        Object.keys(allDirectives).forEach(function(key, index) {
-            if(testDirectiveKeys.indexOf(key) > -1) {
+
+        Object.keys(allDirectives).forEach(function(key) {
+            if (testDirectiveKeys.indexOf(key) > -1) {
                 var testDirective = testPolicy.directives[key];
                 expect(directiveKeys.indexOf(key)).to.be.above(-1);
                 testDirective.forEach(function(rule, dirIndex) {
@@ -123,7 +122,7 @@ describe('express-csp', function () {
         it('sets a brand on the application', function () {
             csp.extend(app);
 
-            expect(app).to.have.property('@express-csp')
+            expect(app).to.have.property('@csp')
                 .that.equals(csp);
         });
 
@@ -177,12 +176,14 @@ describe('express-csp', function () {
         var script2 = 'bar();';
         var style1 = 'body{background:#fff}';
         var style2 = 'body{border:1px solid #000}';
+        var style3 = 'p{background:#911d21}';
 
         var script2hash = hash(script2);
         var style2hash = hash(style2);
 
         app.signScript(script1);
         app.signStyle(style1);
+        app.signStyle(style3);
 
         app.route('/foo').get(function (req, res) {
             expect(res).to.have.property('signScript')
@@ -229,7 +230,7 @@ describe('express-csp', function () {
                     });
 
                     hashedStyles = hashedStyles[0].split(' ').slice(1);
-                    expect(hashedStyles.length).to.equal(1);
+                    expect(hashedStyles.length).to.equal(2);
                     expect(hashedStyles).to.contain('\'' + 'sha256-' + hash(style1) + '\'');
                 })
                 .end(done);
@@ -266,7 +267,7 @@ describe('express-csp', function () {
                     hashedStyles = hashedStyles[0].split(' ').slice(1);
 
                     expect(hashedStyles).to.contain('\'' + 'sha256-' + style2hash + '\'');
-                    expect(hashedStyles.length).to.equal(2);
+                    expect(hashedStyles.length).to.equal(3);
                 })
                 .end(done);
         });
@@ -337,9 +338,9 @@ describe('express-csp', function () {
         });
     });
     
-    describe('csp polices cannot be altered after they are set', function(done) {
-        var cspPolicies = getCleanPolicies(),
-            app = createApp(cspPolicies);
+    describe('csp polices cannot be altered after they are set', function() {
+        var cspPolicies = getCleanPolicies();
+        var app = createApp(cspPolicies);
 
         Object.keys(cspPolicies).forEach(function(policyType) {
             cspPolicies[policyType].useScriptNonce = true;
@@ -349,6 +350,7 @@ describe('express-csp', function () {
             cspPolicies[policyType].directives['style-src'].push('*');
             cspPolicies[policyType].directives['report-uri'] = ['http://reports.nefarious.com/reports'];
         });
+
         app.route('/foo').get(function (req, res) {
             res.writeHead(200, {
                 'Content-Type': 'text/html'
@@ -384,7 +386,7 @@ describe('express-csp', function () {
         it('includes the token in res.locals when it already has script-src rules', function (done) {
             app = setupApp(createApp({
                 policy: {
-                    useScriptNonce: true          
+                    useScriptNonce: true
                 }
             }));
             request(app).get('/bar')
@@ -494,19 +496,19 @@ describe('express-csp', function () {
     
     describe('response.setPolicy', function () {
         var app = createApp({
-                policy: {
-                    directives: allDirectives
-                },
-                reportPolicy: {
-                    directives: allDirectives
-                }
-            }),
-            responsePolicies = getCleanPolicies();
+            policy: {
+                directives: allDirectives
+            },
+            reportPolicy: {
+                directives: allDirectives
+            }
+        });
+
+        var responsePolicies = getCleanPolicies();
+
         app.route('/baz').get(function (req, res) {
             res.setPolicy(responsePolicies);
-            res.writeHead(200, {
-                'Content-Type': 'text/html'
-            });
+            res.writeHead(200, { 'Content-Type': 'text/html' });
             res.end('<!DOCTYPE html><html><head><title>CSP test bar</title></head><body></body></html>');
         });
 
@@ -537,7 +539,8 @@ describe('express-csp', function () {
         app.route('/foo').get(function (req, res) {
             //set the response policy 
             res.setPolicy(responsePolicies);
-            Object.keys(responsePolicies).forEach(function(policyType) {
+
+            Object.keys(responsePolicies).forEach(function (policyType) {
                 responsePolicies[policyType].useScriptNonce = true;
                 responsePolicies[policyType].useStyleNonce = true;
                 responsePolicies[policyType].directives['default-src'] = ['*'];
@@ -546,9 +549,7 @@ describe('express-csp', function () {
                 responsePolicies[policyType].directives['report-uri'] = ['http://reports.nefarious.com/reports'];
             });
 
-            res.writeHead(200, {
-                'Content-Type': 'text/html'
-            });
+            res.writeHead(200, { 'Content-Type': 'text/html' });
             res.end('<!DOCTYPE html><html><head><title>CSP test bar</title></head><body></body></html>');
         });
         
@@ -560,11 +561,13 @@ describe('express-csp', function () {
 
         app.route('/bar').get(function (req, res) {
             res.setPolicy(getCleanPolicies());
+
             Object.keys(responsePolicies).forEach(function(policyType) {
                     res.locals.cspPolicies[policyType].useScriptNonce = true;
                     res.locals.cspPolicies[policyType].useStyleNonce = true;
                     res.locals.cspPolicies[policyType].directives['default-src'] = ['*'];
                     res.locals.cspPolicies[policyType].directives['script-src'] = ['*'];
+
                     //attempting to update an immutable array should throw an error 
                     try {
                         res.locals.cspPolicies[policyType].directives['style-src'].push('*');
@@ -573,12 +576,10 @@ describe('express-csp', function () {
                     res.locals.cspPolicies[policyType].directives['report-uri'] = ['http://reports.nefarious.com/reports'];
             });
 
-            //signing a script will force the headers to be reset
+            // signing a script will force the headers to be reset
             res.signScript('console.log("bar");');
 
-            res.writeHead(200, {
-                'Content-Type': 'text/html'
-            });
+            res.writeHead(200, { 'Content-Type': 'text/html' });
             res.end('<!DOCTYPE html><html><head><title>CSP test bar</title></head><body></body></html>');
         });
 
@@ -589,7 +590,7 @@ describe('express-csp', function () {
         });
     });
 
-    describe('manually set nonces and shas', function(done) {
+    describe('manually set nonces and shas', function() {
         var policies = getCleanPolicies(),
             sha = 'sha256-' + hash('console.log("I am safe");'),
             app;

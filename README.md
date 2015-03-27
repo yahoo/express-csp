@@ -1,6 +1,7 @@
 express-csp
 ===========
 
+[![npm Version][npm-badge]][npm]
 [![Build Status][travis-badge]][travis]
 
 Usage
@@ -16,6 +17,7 @@ API
 var csp = require('express-csp');
 
 var app = express();
+
 csp.extend(app, {
     policy: {
         directives: {
@@ -50,7 +52,7 @@ When set to true, a [`nonce`](http://w3c.github.io/webappsec/specs/content-secur
 
 When set to true, a [`nonce`](http://w3c.github.io/webappsec/specs/content-security-policy/#script-src-the-nonce-attribute) will be generated for the `'style-src'` directive of each response and made available as the `res.locals.cspToken` value. This value can then be used in your templates to allow for specified inline script and style blocks. If [`useScriptNonce`](#useScriptNonce) is also true, the same token will be added to the `'script-src'` directive and the same token will be available for inline script blocks.
 
-```js
+```html
 <script nonce="{{res.locals.cspToken}}">
 foo();
 </script>
@@ -90,7 +92,7 @@ app.signScript('foo();');
 ```
 
 Enables `foo();` throughout the app
-```js
+```html
 <script>foo();</script>
 ```
 At the response level
@@ -100,12 +102,12 @@ app.route('/').get(function (req, res) {
 });
 ```
 Enables `bar();` for the route only.
-```js
+```html
 <script>bar();</script>
 ```
 
 These will not work with the above examples.
-```js
+```html
 <script>
 foo();
 </script>
@@ -132,7 +134,7 @@ app.route('/').get(function (req, res) {
 ### res.setPolicy
 Allows policy to be set per request. The app level policy set in `extend` will be ignored when `res.setPolicy` is used. This method takes the same config object as the `extend` method.
 
-```
+```js
 app.get('/', function(req, res, next) {
     res.setPolicy({
         policy: {
@@ -154,5 +156,7 @@ app.get('/', function(req, res, next) {
 Code licensed under the BSD license. See [LICENSE file][] file for terms.
 
 [LICENSE file]: https://github.com/yahoo/express-csp/blob/master/LICENSE
-[travis]: https://magnum.travis-ci.com/yahoo/express-csp
-[travis-badge]: https://magnum.travis-ci.com/yahoo/express-csp.svg?token=sERbWYBoHCubXykGzY6R
+[travis]: https://travis-ci.org/yahoo/express-csp
+[travis-badge]: http://img.shields.io/travis/yahoo/express-csp.svg?style=flat-square
+[npm]: https://www.npmjs.org/package/express-csp
+[npm-badge]: https://img.shields.io/npm/v/express-csp.svg?style=flat-square
