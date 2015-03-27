@@ -8,10 +8,8 @@ notifications:
             - ypt-team@yahoo-inc.com
         on_success: change
         on_failure: always
-before_deploy:
-    - test $TRAVIS_TEST_RESULT = 0 \
-        && echo "travis branch " $TRAVIS_BRANCH \
-        && echo "travis build directory " $TRAVIS_BUILD_DIR
+after_success:
+    - test $TRAVIS_TEST_RESULT = 0 && echo "tests pass"
 deploy:
     provider: npm
     email: ypt-team@yahoo-inc.com
