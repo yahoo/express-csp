@@ -1,6 +1,6 @@
 {
   "name": "express-csp",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Express middleware that simplifies using Content Security Policy",
   "licenses": [
     {
