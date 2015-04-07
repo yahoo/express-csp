@@ -117,13 +117,11 @@ exports.extend = function (app, config) {
 
             if (policies) {
                 policyHeader = policyBuilder.call(res, policies, scriptKeys, styleKeys);
-                res.removeHeader('Content-Security-Policy');
                 res.setHeader('Content-Security-Policy', policyHeader);
             }
 
             if (reportPolicies) {
                 reportPolicyHeader = policyBuilder.call(res, reportPolicies, scriptKeys, styleKeys);
-                res.removeHeader('Content-Security-Policy-Report-Only');
                 res.setHeader('Content-Security-Policy-Report-Only', reportPolicyHeader);
             }
         });
