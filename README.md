@@ -21,7 +21,7 @@ var app = express();
 csp.extend(app, {
     policy: {
         directives: {
-            'default-src': ['\'self\'', 'https://*.foo.com'],
+            'default-src': ['self', 'https://*.foo.com'],
             'script-src': ['*.apis.bar.com']
         }
     },
@@ -29,7 +29,7 @@ csp.extend(app, {
         useScriptNonce: true,
         useStyleNonce: true,
         directives: {
-            'default-src': ['\'self\'', 'https://*.foo.com'],
+            'default-src': ['self', 'https://*.foo.com'],
             'script-src': ['*.apis.bar.com'],
             'plugin-types': ['application/pdf']
         }
