@@ -30,6 +30,7 @@ var allDirectives = {
     'font-src'        : ['fonts.foo.com'],
     'form-action'     : ['self', '*.apis.baz.com'],
     'frame-ancestors' : ['self'],
+    'frame-src'       : ['self'],
     'img-src'         : ['self', '*.assets.foo.com', '*.images.foo.com'],
     'media-src'       : ['self', '*.content.foo.com', '*.videos.bar.com'],
     'object-src'      : ['self', '*.docs.bar.com'],
@@ -220,7 +221,7 @@ describe('express-csp', function () {
                 })
                 .end(done);
         });
-        
+
         specify('for application shared styles', function (done) {
             request(app).get('/')
                 .expect(function (res) {
@@ -300,7 +301,7 @@ describe('express-csp', function () {
                 .end(done);
         });
     });
-    
+
     describe('directives get set', function () {
         var app = createApp({
                 policy: {
@@ -310,7 +311,7 @@ describe('express-csp', function () {
                     directives: allDirectives
                 }
             });
-       
+
         Object.keys(allDirectives).forEach(function(directive, index) {
             it(directive + ' directive is in the  `content-security-policy` header', function(done) {
                 request(app).get('/')
@@ -323,7 +324,7 @@ describe('express-csp', function () {
                         });
                     }).end(done);
             });
-            
+
             it(directive + ' report directive is in the `content-security-policy-report-only` header', function(done) {
                 request(app).get('/')
                     .expect(function (res) {
@@ -337,7 +338,7 @@ describe('express-csp', function () {
             });
         });
     });
-    
+
     describe('csp polices cannot be altered after they are set', function() {
         var cspPolicies = getCleanPolicies();
         var app = createApp(cspPolicies);
@@ -357,15 +358,15 @@ describe('express-csp', function () {
             });
             res.end('<!DOCTYPE html><html><head><title>CSP test bar</title></head><body></body></html>');
         });
-        
+
         it('the csp policies are unaffected by changing the original value', function(done) {
             request(app).get('/foo')
                 .expect(testToEnsurePoliciesAreUnchanged)
                 .end(done);
         });
-        
+
     });
-    
+
     describe('nonce token middleware', function () {
         var app;
         function setupApp(app) {
@@ -399,13 +400,13 @@ describe('express-csp', function () {
                             return policy.substr(0, 'script-src '.length) ===
                                 'script-src ';
                         })[0];
-                    
+
                     policy = policy.split(' ').slice(1);
 
                     var nonce = policy.filter(function (rule) {
                         return rule.replace(/\'/g, '').substr(0, 'nonce-'.length) === 'nonce-';
                     })[0].replace(/\'/g, '').substr('nonce-'.length);
-    
+
                     expect(token.length).to.equal(nonce.length);
                     expect(token).to.equal(nonce);
                 })
@@ -425,7 +426,7 @@ describe('express-csp', function () {
                 .expect(function (res) {
                     var token = res.text.trim();
                     expect(token.length).to.be.above(0);
-                    
+
                     var policy = res.headers['content-security-policy'].split(';')
                         .filter(function (policy) {
                             return policy.substr(0, 'script-src '.length) ===
@@ -436,7 +437,7 @@ describe('express-csp', function () {
                     var nonce = policy.filter(function (rule) {
                         return rule.replace(/\'/g, '').substr(0, 'nonce-'.length) === 'nonce-';
                     })[0].replace(/\'/g, '').substr('nonce-'.length);
-                    
+
                     expect(token.length).to.equal(nonce.length);
                     expect(token).to.equal(nonce);
                 })
@@ -446,7 +447,7 @@ describe('express-csp', function () {
         it('includes a token when set in the config', function(done) {
             app = setupApp(createApp({
                 policy: {
-                    useScriptNonce: true          
+                    useScriptNonce: true
                 }
             }));
             request(app).get('/bar')
@@ -487,13 +488,13 @@ describe('express-csp', function () {
                         var nonce = policy.filter(function(rule) {
                             return rule.replace(/\'/g, '').indexOf('nonce-') === 0;
                         });
-                        
+
                         expect(nonce.length).to.equal(1);
                 })
                 .end(done);
         });
     });
-    
+
     describe('response.setPolicy', function () {
         var app = createApp({
             policy: {
@@ -526,7 +527,7 @@ describe('express-csp', function () {
                         }).forEach(function(item, index, arr) {
                             var policy = policies[index].split(' ');
                             var key = arr[index];
-                            expect(policy.shift()).to.equal(key); 
+                            expect(policy.shift()).to.equal(key);
                             policy.forEach(function(item, index) {
                                 expect(item.replace(/\'/g, '')).to.equal(responsePolicies[policyType].directives[key][index]);
                             });
@@ -537,7 +538,7 @@ describe('express-csp', function () {
         });
 
         app.route('/foo').get(function (req, res) {
-            //set the response policy 
+            //set the response policy
             res.setPolicy(responsePolicies);
 
             Object.keys(responsePolicies).forEach(function (policyType) {
@@ -552,7 +553,7 @@ describe('express-csp', function () {
             res.writeHead(200, { 'Content-Type': 'text/html' });
             res.end('<!DOCTYPE html><html><head><title>CSP test bar</title></head><body></body></html>');
         });
-        
+
         it('the cspPolicies set by response.setPolicy cannot be altered', function(done) {
             request(app).get('/foo')
                 .expect(testToEnsurePoliciesAreUnchanged)
@@ -568,7 +569,7 @@ describe('express-csp', function () {
                     res.locals.cspPolicies[policyType].directives['default-src'] = ['*'];
                     res.locals.cspPolicies[policyType].directives['script-src'] = ['*'];
 
-                    //attempting to update an immutable array should throw an error 
+                    //attempting to update an immutable array should throw an error
                     try {
                         res.locals.cspPolicies[policyType].directives['style-src'].push('*');
                     } catch(e) {
@@ -594,16 +595,16 @@ describe('express-csp', function () {
         var policies = getCleanPolicies(),
             sha = 'sha256-' + hash('console.log("I am safe");'),
             app;
-        policies.policy.directives['script-src'].push(sha);    
+        policies.policy.directives['script-src'].push(sha);
         app  = createApp(policies);
-        
+
         app.route('/').get(function (req, res) {
             res.writeHead(200, {
                 'Content-Type': 'text/html'
             });
             res.end('<!DOCTYPE html><html><head><title>Manual nonce and sha test</title></head><body></body></html>');
         });
-        
+
         it('shas can be manually set at the app level', function(done) {
             request(app).get('/')
                 .expect(function(res) {
@@ -648,10 +649,10 @@ describe('express-csp', function () {
                 error;
             policies.policy.directives['script-src'].push(nonce);
             try {
-                app = createApp(policies);    
+                app = createApp(policies);
             } catch(e) {
                 error = e;
-            } 
+            }
             expect(error).to.not.be.an('undefined');
             expect(error.message).to.not.be.an('undefined');
             expect(error.message).to.equal("You cannot explicitly set a nonce at the app level. If you want to use a nonce, set `useScriptNonce` or `useStyleNonce` to true in the config object.");
