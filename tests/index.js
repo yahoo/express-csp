@@ -32,7 +32,7 @@ var allDirectives = {
     'frame-ancestors' : ['self'],
     'img-src'         : ['self', '*.assets.foo.com', '*.images.foo.com'],
     'media-src'       : ['self', '*.content.foo.com', '*.videos.bar.com'],
-    'object-src'      : ['self', '*.docs.bar.com'],
+    'object-src'      : ['none'],
     'plugin-types'    : ['application/pdf'],
     'report-uri'      : ['http://www.foo.com/report'],
     'script-src'      : ['self', '*.scripts.foo.com', '*.build.baz.com'],
@@ -366,6 +366,33 @@ describe('express-csp', function () {
         
     });
     
+
+    describe('directives are quoted properly', function () {
+        var app = createApp({
+                policy: {
+                    directives: allDirectives
+                },
+                reportPolicy: {
+                    directives: allDirectives
+                }
+            });
+
+        specify('for none', function (done) {
+            request(app).get('/')
+                .expect(function (res) {
+                    var policies = res.headers['content-security-policy'].split(';');
+                    var hashedScripts = policies.filter(function (policy) {
+                        return policy.split(' ')[0] === 'object-src';
+                    });
+
+                    hashedScripts = hashedScripts[0].split(' ').slice(1);
+                    expect(hashedScripts.length).to.equal(1);
+                    expect(hashedScripts).to.contain('\'none\'');
+                })
+                .end(done);
+        });
+    });
+
     describe('nonce token middleware', function () {
         var app;
         function setupApp(app) {
