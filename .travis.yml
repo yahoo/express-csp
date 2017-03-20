@@ -23,8 +23,8 @@ after_success:
 deploy:
     provider: npm
     email: ypt-team@yahoo-inc.com
-    api_key: 
-        secure: s5KbfZ2QmDElovpw8PZYFwiwYIcvmORO1dpnsbSpuNrdgW/vr79vxmETg1RdaTOC+eprtJgf3DkqBeuUeavc2S9ksO9sbryhL48Sfu3wQBQWIfana6H1weVpHxUfS4TU9bT2zRlxRDQsYuFmmtacaJ0DpDKrnpdpVBgXxKJWq4o=
+    api_key:
+        secure: qKXWyIEELFeIji1vHkdgPtQjw13zbCDKGr1kAz/Gb8AEMGXfnOZvE7ToM/SNSWsYlXtpE1BqbNBz+4qt33nmCZEoC8jDZEnH33U5mw6qd0v+2BvpC4qA+0fU2KeMvT6/fRxltziT3moYjpFUXLUDb+c4sltOy8EMSnWVy5U9+HjuLWl+2JeWcFGt1O74X4U2bpDWmNS2U2rxuNMR4BmYxLHNwxHnRK8DPcNESB+oa9GELG0sUHC5wbGz4myWqDX8WJWXi97RyUTZJ3/cK+6WjJzig6+K2+Jn6uj6Lhq2juXKC+ZmJMdB12sDbSW5KmJp37I/JZwv0Xuc+r8+f1MJmU0jopHasLq1kd73msEVIdDJekVyQ0RAw2R83spEzN7uDXi56t9zfJs+Iw/FWJTlOnm0mbhoal9H5CmATx9vW+lh5aWD3hsFQYSog9PHwToiS/czqbr6GYYxwYOWvu9ospubL0P6wSUxVDcceYCXsFP9paNgC93kYpIqSSfdQrBblx1gv5Vve6hcBnpajEHK4ud261/ZgedLpv7EYIJyQHMXW2ggYePQQEpyxtHFvSQA79efqgVnq/MQBp6JkdwsfB7E+e1rp15E6CCzTtWSdCjVTlwqOI6qfKEMjRyK2iizl3+NXoyJ/BT+rD7S0wF13HlsfOti91HVDaWi/q2694U=
     on:
         condition: $VALID_VERSION = true
         tags: true
