@@ -63,19 +63,27 @@ An object of key/value pairs representing [CSP Policy Directives](http://w3c.git
 name and the value is an array of rules to apply to that value. 
 
 - [`base-uri`](http://w3c.github.io/webappsec/specs/content-security-policy/#directive-base-uri)
+- [`block-all-mixed-content`] (http://w3c.github.io/webappsec/specs/content-security-policy/#block-all-mixed-content)
 - [`child-src`](http://w3c.github.io/webappsec/specs/content-security-policy/#directive-child-src)
 - [`connect-src`](http://w3c.github.io/webappsec/specs/content-security-policy/#directive-connect-src)
 - [`default-src`](http://w3c.github.io/webappsec/specs/content-security-policy/#directive-default-src)
 - [`font-src`](http://w3c.github.io/webappsec/specs/content-security-policy/#directive-font-src)
 - [`form-action`](http://w3c.github.io/webappsec/specs/content-security-policy/#directive-form-action)
 - [`frame-ancestors`](http://w3c.github.io/webappsec/specs/content-security-policy/#directive-frame-ancestors)
-- [`img-src`](http://w3c.github.io/webappsec/specs/content-security-policy/#directive-img-src)
-- [`media-src`](http://w3c.github.io/webappsec/specs/content-security-policy/#directive-media-src)
-- [`object-src`](http://w3c.github.io/webappsec/specs/content-security-policy/#directive-object-src)
+- [`frame-src`] (http://w3c.github.io/webappsec/specs/content-security-policy/#frame-src)
+- [`img-src`] (http://w3c.github.io/webappsec/specs/content-security-policy/#img-src)
+- [`media-src`] (http://w3c.github.io/webappsec/specs/content-security-policy/#media-src)
+- [`object-src`] (http://w3c.github.io/webappsec/specs/content-security-policy/#media-src)
 - [`plugin-types`](http://w3c.github.io/webappsec/specs/content-security-policy/#directive-plugin-types)
+- [`report-uri`](http://w3c.github.io/webappsec/specs/content-security-policy/#directive-report-uri)
+- [`reflected-xss`](http://w3c.github.io/webappsec/specs/content-security-policy/#directive-reflected-xss
+- [`require-sri-for`](http://w3c.github.io/webappsec/specs/content-security-policy/#directive-require-sri-for)
 - [`script-src`](http://w3c.github.io/webappsec/specs/content-security-policy/#directive-script-src)
 - [`style-src`](http://w3c.github.io/webappsec/specs/content-security-policy/#directive-style-src)
-- [`report-uri`](http://w3c.github.io/webappsec/specs/content-security-policy/#directive-report-uri)
+- [`upgrade-insecure-requests`](http://w3c.github.io/webappsec/specs/content-security-policy/#directive-upgrade-insecure-requests)
+- [`worker-src`](http://w3c.github.io/webappsec/specs/content-security-policy/#directive-worker-src)
+- [`manifest-src`](http://w3c.github.io/webappsec/specs/content-security-policy/#directive-manifest-src)
+
 
 
 #### reportPolicy
